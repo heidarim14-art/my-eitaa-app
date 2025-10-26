@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آکادمی زبان حیدری</title>
+    <!-- اتصال به کیت توسعه ایتا -->
+    <script src="https://developer.eitaa.com/eitaa-web-app.js"></script>
+    <style>
+        /* استایل‌های ظاهری برای زیبایی برنامه */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f4f7; 
+            color: #333; 
+        }
+        .container { 
+            max-width: 90%;
+            width: 400px;
+            margin: auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 { 
+            color: #007bff; 
+            font-size: 24px;
+        }
+        p { 
+            margin-bottom: 25px; 
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        button { 
+            background-color: #28a745; 
+            color: white; 
+            padding: 15px 30px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 18px; 
+            cursor: pointer; 
+            width: 100%;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover { 
+            background-color: #218838; 
+        }
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        #message { 
+            margin-top: 20px; 
+            font-weight: bold; 
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>آکادمی زبان حیدری</h1>
+        <p>برای دریافت فوری فایل PDF رایگان "100 عبارت کاربردی شروع زبان انگلیسی"، روی دکمه زیر کلیک کن!</p>
+        <button id="getGiftButton">🎁 هدیه‌ام رو می‌خوام!</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // منتظر می‌مانیم تا کیت توسعه ایتا کاملا بارگذاری شود
+        window.Eitaa.WebApp.ready();
+        const eitaa = window.Eitaa.WebApp;
+
+        const getGiftButton = document.getElementById('getGiftButton');
+        const messageElement = document.getElementById('message');
+
+        // وقتی کاربر روی دکمه کلیک کرد
+        getGiftButton.addEventListener('click', function() {
+            // از ایتا می‌خواهیم که شماره تماس کاربر را درخواست کند
+            eitaa.requestContact((isShared, contact) => {
+                if (isShared) {
+                    // اگر کاربر شماره را به اشتراک گذاشت
+                    messageElement.innerText = 'عالیه! داریم هدیه‌ات رو آماده می‌کنیم...';
+                    getGiftButton.disabled = true; // دکمه را غیرفعال می‌کنیم
+
+                    // حالا شماره را برای "مغز برنامه" (سرور پایتون) می‌فرستیم
+                    fetch('/submit_contact', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            // اطلاعات کاربر را از خود کیت توسعه ایتا می‌گیریم
+                            chat_id: eitaa.initDataUnsafe.user.id,
+                            phone: contact.phone_number
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'ok') {
+                            messageElement.style.color = 'green';
+                            messageElement.innerText = 'هدیه‌ات با موفقیت به چت خصوصی‌ات فرستاده شد! می‌تونی این پنجره رو ببندی.';
+                            // بعد از چند ثانیه، پنجره برنامک را می‌بندیم تا تجربه کاربری بهتری ایجاد شود
+                            setTimeout(() => eitaa.close(), 4000);
+                        } else {
+                             messageElement.style.color = 'red';
+                             messageElement.innerText = 'متاسفانه در ارسال فایل مشکلی پیش اومد. لطفاً دوباره تلاش کن.';
+                             getGiftButton.disabled = false; // دکمه را دوباره فعال می‌کنیم
+                        }
+                    })
+                    .catch(error => {
+                        messageElement.style.color = 'red';
+                        messageElement.innerText = 'خطای شبکه! لطفاً از اتصال اینترنت خود مطمئن شوید.';
+                        getGiftButton.disabled = false;
+                    });
+                } else {
+                    messageElement.style.color = 'orange';
+                    messageElement.innerText = 'برای گرفتن هدیه، باید شماره‌ات رو با ما به اشتراک بذاری.';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
