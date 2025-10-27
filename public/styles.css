@@ -1,0 +1,92 @@
+/* public/styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  direction: rtl;
+  background-color: #f4f7f6;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.container {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 24px 30px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+header img {
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  color: #005a9c;
+  font-size: 1.4rem;
+  margin: 10px 0;
+}
+
+p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+#shareBtn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Vazirmatn', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+#shareBtn:hover {
+  background-color: #0056b3;
+}
+
+#shareBtn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+#thanks {
+  margin-top: 20px;
+}
+
+#thanks h2 {
+  color: #28a745;
+}
+
+#thanks a {
+  display: block;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+
+#thanks a:hover {
+  background-color: #e0e0e0;
+}
